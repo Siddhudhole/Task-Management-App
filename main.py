@@ -1,98 +1,91 @@
-import random
 import pandas as pd 
-
-# Initialize dataframe for reference
-
-
-# Initialize an empty task list
-tasks = {'description':[],'priority':[]}
-
-# read exiting csv file
-try :
-    tasksdf = pd.read_csv('tasks.csv')
-except FileNotFoundError:
-    pass 
-
-
-# Function to save tasks to a CSV file
-def save_tasks():
-    tasksdf.to_csv('task.csv', index=False) 
-
-# Initialize for add tasks
-def add_task(description, priority):
-    global tasks 
-    global tasksdf
-    tasks['description'].append(description)
-    tasks['priority'].append(priority)
-    print(f'Task "{description}" added successfully.') 
-    new_tasks = pd.DataFrame(tasks)
-    tasksdf = pd.concat([tasksdf,new_tasks],ignore_index=True)
-    tasksdf.to_csv('task.csv')
-     
-
-# Initialize for view all tasks
-def view_tasks():
-    if tasks:
-        for i in tasks['description']:
-            print(i) 
-        
-    else:
-        print("No tasks available.") 
-
-# Initialize for modify tasks
-def modify_task(x):
-    if x>= len(tasks['description']):
-       tasks['description'][x-1]=input('Enter a new task :')
-       print("sucessfully modify task :",tasks["description"][x-1])
-    else : 
-        print("enter valid input ") 
-
-# Initialize for remove tasks
-def remove_task():
-    if tasks:
-        view_tasks()
-        x = int(input("Enter Number :"))
-        del tasks['description'][x-1]
-        del tasks['priority'][x-1]
-        print('remove succesfully ')
-    else :
-        print("Tasks Not Present !")
-
-
-while True :
-    print("\nTask Management App")
-    print("1. Add Task")
-    print("2. Remove Task")
-    print("3. List Tasks")
-    print("4. modify task")
-    print("5. Exit")
+class Task_app:
+    tasks = {'description':[],'priority':[]}
+# Read old tasks 
     try :
+        old_tasks = pd.read_csv('task.csv')
+        old_tasks =pd.DataFrame(old_tasks)
+    except FileNotFoundError:
+        pass
+        
+        
+    
+    # Initialize for add tasks
+    def add_task(self):
+        while True:
+            x = (input("add new task Yes or Not: "))
+            x = x.upper()
+            if x =='YES':
 
-       choice =int(input("Enter Your choice : "))
-    except :
-        print("Plz Enter a Number") 
 
-    if choice == 1 :
+                description = input("Enter description :")
+                priority = input("Enter priority : ")
+                priority =priority.upper()
+                object.tasks['description'].append(description)
+                object.tasks['priority'].append(priority) 
+                new_tasks = pd.DataFrame(object.tasks) 
+            else :
+                break 
         try :
-            desc = input("Enter Description : ")
-            prio = input("Enter Priority Low/High/Medium : ")
-            add_task(desc,prio.upper())
 
+            object.tasks = pd.concat([object.old_tasks,new_tasks],ignore_index=True)
+            object.tasks.to_csv('task.csv',index=False)
+            
+
+        
         except :
-            print("Enter valid description & priority")
+            new_tasks.to_csv('task.csv') 
 
-    elif choice == 2:
-        remove_task()
-  
 
-    elif choice == 3 :
-        view_tasks()
 
-    elif choice == 4 :
-        view_tasks()
-        x = int(input("Enter a number present the task : "))
-        modify_task(x) 
-         
+ # Initialize for list tasks   
+    def view_tasks(self):
+        tasks = pd.read_csv('task.csv')
+        if tasks.empty:
+             print('Task is Not present !')
+           
+        else :
+            task = list(tasks['description'][:])
+            for i in task :
+                print(i)  
 
-    elif choice == 5:
-        break 
+# Initialize for remove tasks 
+    def remove_task(self):
+        task = pd.read_csv('task.csv')
+
+        if task.empty :
+            print("Task Is not Present !")
+        else :
+            object.view_tasks()
+            x = int(input("Enter Number task is present :"))
+            if x <= len(task):
+                task = task.drop(x-1)
+                task.to_csv('task.csv') 
+                print("Successfully remove Task !") 
+            else :
+                print("Enter invalid input ! ") 
+
+            
+           
+             
+    
+if __name__ == "__main__":
+
+    object = Task_app() 
+    while True :
+        print("\nTask Management App")
+        print("1. Add Task")
+        print("2. List Task") 
+        print("3. Remove Task")
+
+
+        choice = int(input("Enter Number :"))
+        if choice == 1:
+            object.add_task() 
+
+        elif choice == 2:
+            object.view_tasks()
+
+        elif choice == 3 :
+            object.remove_task()
+ 
