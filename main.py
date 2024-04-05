@@ -110,10 +110,13 @@ class Task_app:
         
         # Make predictions on the test set
         y_pred = nb_classifier.predict(input_keyword_tfidf) 
-        print("Recommdated Task :-> ",y_pred[0])  
+         
 
     def Recommdation():
-        pass 
+        try :
+            print("Recommdated Task :-> ",y_pred[0])  
+        except :
+            print('I am Not able to Recommdation') 
         
  
 
